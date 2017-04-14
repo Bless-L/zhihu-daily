@@ -4,12 +4,7 @@ export default class PostItem extends Component {
   constructor(props) {
     super(props);
   }
-
-  componentWillMount() {
-
-  }
-  render() {
-    
+  render() { 
     return (
       <div className="post_item">
         <p className="post_item_name">{this.props.title}</p>
