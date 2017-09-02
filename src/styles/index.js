@@ -1,2 +1,5 @@
 import reset from './reset.scss'
 import post from './post.scss'
+import home from './home.scss'
+import detail from './detail.scss'
+import swiper from './swiper.scss'

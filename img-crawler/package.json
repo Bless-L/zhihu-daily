@@ -1,0 +1,27 @@
+{
+  "name": "linglong-img",
+  "version": "1.0.0",
+  "description": "爬取图片",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "img"
+  ],
+  "author": "bless-l",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "superagent": "^3.6.0",
+    "sync-request": "^4.1.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-image-resize": "^0.12.0",
+    "gulp-imagemin": "^3.3.0",
+    "imagemin": "^5.3.1",
+    "imagemin-jpegtran": "^5.0.2",
+    "imagemin-pngquant": "^5.0.1"
+  }
+}

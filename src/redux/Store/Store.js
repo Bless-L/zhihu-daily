@@ -11,5 +11,5 @@ const store = createStore(
     createLogger()
   )
 )
-console.log(store.getState());
+
 export default store

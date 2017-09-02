@@ -4,7 +4,9 @@ const YAHOO_PROXY_SUFFIX = '%22&format=json'
 const NEWS = 'http://news-at.zhihu.com/api/4/news/latest'
 const NEWS_DETAIL = 'http://news-at.zhihu.com/api/4/news/{id}'
 const NEWS_EXTRA = 'http://news-at.zhihu.com/api/4/story-extra/#{id}'
+const NEWS_BEFORE = 'https://news-at.zhihu.com/api/4/news/before/{date}'
 
 export const NEWS_API = `${YAHOO_PROXY_BASE}${NEWS}${YAHOO_PROXY_SUFFIX}`
 export const NEWS_DETAIL_API = `${YAHOO_PROXY_BASE}${NEWS_DETAIL}${YAHOO_PROXY_SUFFIX}`
 export const NEWS_EXTRA_API = `${YAHOO_PROXY_BASE}${NEWS_EXTRA}${YAHOO_PROXY_SUFFIX}`
+export const NEWS_BEFORE_API = `${YAHOO_PROXY_BASE}${NEWS_BEFORE}${YAHOO_PROXY_SUFFIX}`

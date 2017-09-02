@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 
 export default class PostItem extends Component {
   constructor(props) {
@@ -6,12 +7,14 @@ export default class PostItem extends Component {
   }
   render() { 
     return (
-      <div className="post_item">
-        <p className="post_item_name">{this.props.title}</p>
-        <div className="post_item_pic">
-          <img src={this.props.images} alt=""/>
+      <Link to={`/detail/${this.props.id}`}>
+        <div className="post_item">
+          <p className="post_item_name">{this.props.title}</p>
+          <div className="post_item_pic">
+            <img src={this.props.images} alt=""/>
+          </div>
         </div>
-      </div>
+      </Link>
     )
   }
 }
