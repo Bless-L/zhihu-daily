@@ -1,14 +1,19 @@
 const request = require('sync-request');
 const fs = require("fs");
 const cheerio = require("cheerio");
-const http = require("http")
+const rq = require("request")
 const path = require("path")
+const Bagpipe = require('bagpipe')
 
-const type = 'bread'
-const types = ['beer', 'black_pepper', 'Bonbon', 'bun', 'burger_sandwich']
-const url = `http://pngimg.com/imgs/food/${type}/index4.html`
+var bagpipe = new Bagpipe(3)
+var count = 1;
 
-function getAllImg () {
+//const types = ['ice_cream', 'lemonade', 'jamon', 'meat', 'fries', 'ham']
+const types = ['hot_dog']
+//const url = `http://pngimg.com/imgs/food/${type}/index4.html`
+
+function getAllImg (types) {
+  let allImgs = []
   types.forEach((type) => {
     for (let i = 0; i < 6; i++) {
       const url = `http://pngimg.com/imgs/food/${type}/index${i === 0 ? '' : i}.html`
@@ -16,50 +21,51 @@ function getAllImg () {
         let res = request('GET', url)
         let body = res.getBody('utf8')
         var $ = cheerio.load(body)
-        getImg($, type)
+        const imgArr = getImgUrls($, type, i)
+        allImgs = allImgs.concat(imgArr)
       } catch (err) {
         console.error(err)
       }
     }
   })
+
+  for (let i = 0; i < allImgs.length; i++) {
+    console.log(`正在下载第${i + 1}张图片`, allImgs[i].url)
+    bagpipe.push(writeImg, allImgs[i], (err, data) => {
+      console.log("["+ count++ +"]: " + data);
+    })
+  }
 }
 
-/*.end(function(err, sres) {
-                // 常规的错误处理
-                if (err) {
-                  console.log(err)
-                  return null;
-                }
-                var $ = cheerio.load(sres.text);
-                getImg($)
-              })*/
-
-function getImg($, type) {
-  const imgUrls = []
+function getImgUrls($, type, times) {
+  const imgArr = []
   $('.png_png img').each((i, elem) => {
-    imgUrls.push(`http://pngimg.com${$(elem).attr('data-cfsrc')}`)
+    let obj = {
+      url: `http://pngimg.com${$(elem).attr('data-cfsrc')}`,
+      type: type,
+      i: times * 20 + i + 1
+    }
+    imgArr.push(obj)
   })
-  imgUrls.forEach((url, i) => {
-    console.log(`正在下载第${i + 1}张图片  `, url)
-
-    var res = request('GET', url)
-    writeImg(res.body)
-  })
+  return imgArr
 }
-function writeImg(res) {
-  console.log(`正在写入第${i + 1}张图片  `)
-  let src = url.split('/')
-  src = src[src.length - 1]
 
+function writeImg(imgObj, callback) {
+  const { url, type, i } = imgObj
+  console.log(`正在写入${type} 第${i}张图片`)
+  let src = path.basename(url)
   let folder = path.join(__dirname, 'images', type)
 
   let isFold = fs.existsSync(folder)
   !isFold && fs.mkdirSync(folder)
-  fs.writeFileSync(path.join(folder, src), res, function(err){
-    if(err){
-      console.log("down fail")
-    }
-    console.log(`写入第${i + 1}张图片成功`)
+  const dest = path.join(folder, src)
+
+  rq.head(url, (err, res, body) => {
+    rq(url).pipe(fs.createWriteStream(dest)).on('close', function() {
+      callback(null, dest)
+      console.log(`写入第${i}张图片成功`)
+    });
   })
 }
-getAllImg()
+
+getAllImg(types)
