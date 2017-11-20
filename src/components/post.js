@@ -4,10 +4,6 @@ import {formatDate} from '../util'
 import PostItem from './postItem'
 
 export default class Post extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const postInfo = this.props.postInfo
     const posts = postInfo.map((post) => {

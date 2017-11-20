@@ -9,32 +9,36 @@ import Banner from '../components/banner'
 
 class Home extends Component {
   constructor(props) {
-    super(props);
-    this.getScrollData = this.getScrollData.bind(this)
+    super(props)
   }
+
   componentDidMount() {
-    const {dispatch} = this.props
-    dispatch(fetchNewsInfo())
+    const { fetchNewsInfo } = this.props
+    fetchNewsInfo()
     window.addEventListener('scroll', this.getScrollData, false)
   }
 
-  getScrollData() {
-    const {newsInfo} = this.props
-    if ((window.document.documentElement.clientHeight + window.document.body.scrollTop) + 100 > 
-      window.document.body.scrollHeight && !newsInfo.isFetching) {
+  getScrollData = () => {
+    const { newsInfo } = this.props
+    const scrollTop = window.pageYOffset
+      || document.documentElement.scrollTop
+      || document.body.scrollTop
+      || 0
+    if ((document.documentElement.clientHeight + scrollTop) + 100 > 
+      document.body.scrollHeight && !newsInfo.isFetching) {
       this.getSectionNext()
     }
   }
 
   getSectionNext() {
-    const {dispatch, newsInfo} = this.props
-    dispatch(fetchBeforeInfo(newsInfo.date))
+    const { fetchBeforeInfo, newsInfo } = this.props
+    fetchBeforeInfo(newsInfo.date)
   }
 
   componentWillUnmount () {
     window.removeEventListener('scroll', this.getScrollData, false)
-    const {dispatch} = this.props
-    dispatch(initHome())
+    const { initHome } = this.props
+    initHome()
   }
 
   render() {
@@ -55,10 +59,22 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    newsInfo: state.newsInfo,
-  }
-} 
+const mapStateToProps = (state) => ({
+  newsInfo: state.newsInfo
+})
 
-export default connect(mapStateToProps)(Home);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchNewsInfo() {
+      dispatch(fetchNewsInfo())
+    },
+    fetchBeforeInfo(date) {
+      dispatch(fetchBeforeInfo(date))
+    },
+    initHome() {
+      dispatch(initHome())
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

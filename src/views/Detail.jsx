@@ -8,13 +8,13 @@ import Article from '../components/article'
 
 class Detail extends Component {
   componentDidMount() {
-    const { dispatch, match } = this.props
+    const { fetchDetailInfo, match } = this.props
     const id = match.params.id
-    dispatch(fetchDetailInfo(id))
+    fetchDetailInfo(id)
   }
   componentWillUnmount() {
-    const { dispatch } = this.props
-    dispatch(initDetail())
+    const { initDetail } = this.props
+    initDetail()
   }
   render() {
     const { detailInfo } = this.props
@@ -27,10 +27,19 @@ class Detail extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    detailInfo: state.detailInfo,
-  }
-} 
+const mapStateToProps = (state) => ({
+  detailInfo: state.detailInfo,
+})
 
-export default connect(mapStateToProps)(Detail);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchDetailInfo(id) {
+      dispatch(fetchDetailInfo(id))
+    },
+    initDetail() {
+      dispatch(initDetail())
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);
